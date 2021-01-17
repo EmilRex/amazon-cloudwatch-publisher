@@ -230,6 +230,9 @@ def initialize_metric_table():
     set_metric_info('DiskWriteBytes', 'Bytes')
     set_metric_info('DiskReadOps', 'Count')
     set_metric_info('DiskWriteOps', 'Count')
+    set_metric_info('DiskUsageFree', 'Bytes')
+    set_metric_info('DiskUsageUsed', 'Bytes')
+    set_metric_info('DiskUsagePercent', 'Percent')
     set_metric_info('NetworkIn', 'Bytes')
     set_metric_info('NetworkOut', 'Bytes')
     set_metric_info('NetworkPacketsIn', 'Count')
@@ -291,6 +294,14 @@ def set_disk_metrics():
     set_relative_metric('DiskWriteOps', disk_io.write_count)
 
 
+def set_disk_usage_metrics():
+    """Write disk usage info into the metric table."""
+    disk_usage = psutil.disk_usage('/')
+    set_absolute_metric('DiskUsageFree', disk_usage.free)
+    set_absolute_metric('DiskUsageUsed', disk_usage.used)
+    set_absolute_metric('DiskUsagePercent', disk_usage.percent)
+
+
 def set_network_metrics():
     """Write network info into the metric table."""
     net_io = psutil.net_io_counters()
@@ -305,6 +316,7 @@ def refresh_metric_table():
     set_cpu_metrics()
     set_memory_metrics()
     set_disk_metrics()
+    set_disk_usage_metrics()
     set_network_metrics()
 
 
