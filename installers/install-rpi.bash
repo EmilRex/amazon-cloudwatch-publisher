@@ -22,11 +22,15 @@ sudo cat << EOF > /etc/systemd/system/amazon-cloudwatch-publisher.service
 Description=amazon-cloudwatch-publisher
 Requires=network.target
 After=network.target
+StartLimitIntervalSec=500
+StartLimitBurst=5
 
 [Service]
 Type=simple
 User=pi
 ExecStart=/opt/aws/amazon-cloudwatch-publisher/bin/amazon-cloudwatch-publisher
+Restart=on-failure
+RestartSec=5s
 
 [Install]
 WantedBy=multi-user.target
